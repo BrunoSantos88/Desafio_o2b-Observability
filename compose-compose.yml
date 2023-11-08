@@ -1,30 +1,25 @@
-version: '3.2'
+version: '3'
 services:
   prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
+    image: prom/prometheus
     ports:
-    - 9090:9090
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     command:
-    - --config.file=/etc/prometheus/prometheus.yml
-    volumes:
-    - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - '--config.file=/etc/prometheus/prometheus.yml'
     depends_on:
-    - cadvisor
-  cadvisor:
-    image: gcr.io/google-containers/cadvisor:latest
-    container_name: cadvisor
+      - node-exporter
+    network_mode: "host"
+
+  node-exporter:
+    image: prom/node-exporter
     ports:
-    - 8080:8080
-    volumes:
-    - /:/rootfs:ro
-    - /var/run:/var/run:rw
-    - /sys:/sys:ro
-    - /var/lib/docker/:/var/lib/docker:ro
-    depends_on:
-    - redis
-  redis:
-    image: redis:latest
-    container_name: redis
+      - 9100:9100
+    network_mode: "host"
+
+  grafana:
+    image: grafana/grafana
     ports:
-    - 6379:6379
+      - 3000:3000
+    network_mode: "host"
