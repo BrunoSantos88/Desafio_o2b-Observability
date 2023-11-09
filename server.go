@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 	"strings"
-
-	"github.com/gree-gorey/geoip-exporter/pkg/conn"
+	
+   "github.com/gree-gorey/geoip-exporter/pkg/conn"
    "github.com/prometheus/client_golang/prometheus"
    "github.com/prometheus/client_golang/prometheus/promhttp"
 )
