@@ -29,6 +29,7 @@ services:
       dockerfile: dockerfile
     container_name: golangapp
     ports:
-      - "8090:8090"
-    networks:
-      - "host"
+      - "8090:8090
+    network_mode: "host"
+    
+    
