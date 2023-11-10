@@ -44,28 +44,3 @@ services:
     ports:
       - "8090:8090"
     network_mode: "host"
-    labels:
-      - "traefik.http.routers.web-app.rule=Host(`localhost/ping`)"
-      - "traefik.http.routers.web-app.entrypoints=web"
-      - "traefik.http.routers.web-app.middlewares=redirect-to-https"
-      - "traefik.http.routers.web-app-secure.rule=Host(`localhost/ping`)"
-      - "traefik.http.routers.web-app-secure.entrypoints=websecure"
-      - "traefik.http.routers.web-app-secure.tls=true"
-      - "traefik.http.routers.web-app-secure.tls.certresolver=myresolver"
-    depends_on:
-      - traefik
-    
-    
-
-  traefik:
-    image: traefik:v2.5
-    container_name: traefik
-    command:
-      - --api.insecure=true
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-    ports:
-      - "80:80"
-      - "8080:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
