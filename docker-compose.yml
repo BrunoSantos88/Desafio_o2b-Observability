@@ -28,7 +28,7 @@ services:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
     ports:
-    - 8081:8081
+    - 8080:8080
     network_mode: "host"
     volumes:
     - /:/rootfs:ro
@@ -40,7 +40,8 @@ services:
     build:
       context: .
       dockerfile: appgo/dockerfile
-    image: goapp1
+    container_name: golangapp
     ports:
       - "8090:8090"
     network_mode: "host"
+
