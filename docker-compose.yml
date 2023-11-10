@@ -39,7 +39,7 @@ services:
   goapp:
     build:
       context: .
-      dockerfile: appgo/dockerfile
+      dockerfile: dockerfile
     container_name: golangapp
     ports:
       - "8090:8090"
