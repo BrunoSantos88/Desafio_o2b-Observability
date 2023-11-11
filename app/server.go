@@ -6,10 +6,17 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
-	"github.com/oschwald/geoip2-golang"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
+   "github.com/gin-gonic/gin"
+   "github.com/oschwald/geoip2-golang"
+   "github.com/prometheus/client_golang/prometheus"
+   "github.com/prometheus/client_golang/prometheus/promhttp"
+)
+
+var pingCounter = prometheus.NewCounter(
+   prometheus.CounterOpts{
+       Name: "ping_request_count",
+       Help: "No of request handled by Ping handler",
+   },
 )
 
 var (
@@ -27,46 +34,37 @@ var (
 func init() {
 	prometheus.MustRegister(geoipCityHits)
 }
+func ping(w http.ResponseWriter, req *http.Request) {
+   pingCounter.Inc()
+   fmt.Fprintf(w, "pong")
+}
+
+router.GET("/", func(c *gin.Context) {
+	// Get the approximate location of the client's IP address
+	ipAddress := c.ClientIP()
+	location, err := getLocation(ipAddress)
+	if err != nil {
+		c.String(500, "Error fetching GeoIP information")
+		return
+	}
+
+	// Increment GeoIP city hits metric
+	labels := prometheus.Labels{
+		"city":   location.City,
+		"country": location.Country,
+	}
+	geoipCityHits.With(labels).Inc()
+
+	// Respond with Hello and GeoIP location
+	c.String(200, fmt.Sprintf("Hello from %s!", location))
+})
 
 func main() {
-	// Load GeoIP database
-	var err error
-	geoipDatabase, err = geoip2.Open("GeoLite2-City.mmdb")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer geoipDatabase.Close()
+   prometheus.MustRegister(pingCounter)
 
-	// Setup Gin router
-	router := gin.Default()
-	router.Use(logRequest)
-
-	// Define a route
-	router.GET("/", func(c *gin.Context) {
-		// Get the approximate location of the client's IP address
-		ipAddress := c.ClientIP()
-		location, err := getLocation(ipAddress)
-		if err != nil {
-			c.String(500, "Error fetching GeoIP information")
-			return
-		}
-
-		// Increment GeoIP city hits metric
-		labels := prometheus.Labels{
-			"city":   location.City,
-			"country": location.Country,
-		}
-		geoipCityHits.With(labels).Inc()
-
-		// Respond with Hello and GeoIP location
-		c.String(200, fmt.Sprintf("Hello from %s!", location))
-	})
-
-	// Expose Prometheus metrics endpoint
-	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
-
-	// Run the server on port 8080
-	router.Run(":8090")
+   http.HandleFunc("/ping", ping)
+   http.Handle("/metrics", promhttp.Handler())
+   http.ListenAndServe(":8090", nil)
 }
 
 type locationInfo struct {
@@ -94,22 +92,4 @@ func getLocation(ipAddress string) (locationInfo, error) {
 		Country: record.Country.Names["en"],
 	}
 	return location, nil
-}
-
-var pingCounter = prometheus.NewCounter(
-   prometheus.CounterOpts{
-       Name: "ping_request_count",
-       Help: "No of request handled by Ping handler",
-   },
-)
-
-func ping(w http.ResponseWriter, req *http.Request) {
-   pingCounter.Inc()
-   fmt.Fprintf(w, "pong")
-}
-
-func main() {
-   prometheus.MustRegister(pingCounter)
-
-   http.HandleFunc("/ping", ping)
 }
