@@ -2,11 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"net"
 	"net/http"
 
-   "github.com/gin-gonic/gin"
    "github.com/oschwald/geoip2-golang"
    "github.com/prometheus/client_golang/prometheus"
    "github.com/prometheus/client_golang/prometheus/promhttp"
