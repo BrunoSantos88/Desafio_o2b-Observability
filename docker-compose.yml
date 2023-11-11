@@ -72,3 +72,12 @@ services:
       - "16686:16686"
     network_mode: "host"
 
+  geoip:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: geoipexporter
+    ports:
+      - "9300:9300"
+    network_mode: "host"
+
