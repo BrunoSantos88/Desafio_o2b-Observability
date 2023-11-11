@@ -39,26 +39,6 @@ func ping(w http.ResponseWriter, req *http.Request) {
    fmt.Fprintf(w, "pong")
 }
 
-	router.GET("/", func(c *gin.Context) {
-		// Get the approximate location of the client's IP address
-		ipAddress := c.ClientIP()
-		location, err := getLocation(ipAddress)
-		if err != nil {
-			c.String(500, "Error fetching GeoIP information")
-			return
-		}
-
-		// Increment GeoIP city hits metric
-		labels := prometheus.Labels{
-			"city":   location.City,
-			"country": location.Country,
-		}
-		geoipCityHits.With(labels).Inc()
-
-		// Respond with Hello and GeoIP location
-		c.String(200, fmt.Sprintf("Hello from %s!", location))
-	})
-
 func main() {
    prometheus.MustRegister(pingCounter)
 
