@@ -28,7 +28,7 @@ services:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
     ports:
-    - "8081:8080"
+    - "8080:8080"
     network_mode: "host"
     volumes:
     - /:/rootfs:ro
@@ -41,6 +41,8 @@ services:
       context: ./app
       dockerfile: dockerfile
     container_name: golangapp
+    volumes:
+      - ./GeoLite2-City.mmdb:/app/GeoLite2-City.mmdb
     ports:
       - "8090:8090"
     network_mode: "host"
