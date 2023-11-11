@@ -38,7 +38,7 @@ services:
   
   goapp:
     build:
-      context: .
+      context: ./app
       dockerfile: dockerfile
     container_name: golangapp
     ports:
