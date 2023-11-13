@@ -3,43 +3,81 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
-   "github.com/oschwald/geoip2-golang"
-   "github.com/prometheus/client_golang/prometheus"
-   "github.com/prometheus/client_golang/prometheus/promhttp"
-)
+	"github.com/opentracing/opentracing-go"
+	"github.com/uber/jaeger-client-go"
+	"github.com/uber/jaeger-client-go/config"
+	"github.com/uber/jaeger-lib/metrics/prometheus"
 
-var pingCounter = prometheus.NewCounter(
-   prometheus.CounterOpts{
-       Name: "ping_request_count",
-       Help: "No of request handled by Ping handler",
-   },
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var (
-	geoipDatabase *geoip2.Reader
-
-	geoipCityHits = prometheus.NewCounterVec(
+	pingCounter = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name: "geoip_city_hits_total",
-			Help: "Total number of GeoIP city hits",
+			Name: "ping_request_count",
+			Help: "Number of requests handled by the Ping handler",
 		},
-		[]string{"city", "country"},
+		[]string{"status"},
 	)
 )
 
 func init() {
-	prometheus.MustRegister(geoipCityHits)
+	prometheus.MustRegister(pingCounter)
+
+	// Configure Jaeger tracer
+	cfg := &config.Configuration{
+		ServiceName: "my-go-app",
+		Sampler: &config.SamplerConfig{
+			Type:  "const",
+			Param: 1,
+		},
+		Reporter: &config.ReporterConfig{
+			LogSpans:      true,
+			AgentHostPort: "jaeger-agent:6831", // Adjust this to your Jaeger agent's address
+		},
+	}
+
+	metricsFactory := prometheus.New()
+	tracer, _, err := cfg.New(
+		"jaeger-go-app",
+		config.Logger(jaeger.StdLogger),
+		config.Metrics(metricsFactory),
+	)
+	if err != nil {
+		fmt.Println("Failed to initialize Jaeger tracer:", err)
+		return
+	}
+
+	opentracing.SetGlobalTracer(tracer)
 }
+
 func ping(w http.ResponseWriter, req *http.Request) {
-   pingCounter.Inc()
-   fmt.Fprintf(w, "pong")
+	// Start a new span for the ping operation
+	span := opentracing.StartSpan("ping")
+	defer span.Finish()
+
+	pingCounter.WithLabelValues("success").Inc()
+
+	// Your logic here
+
+	fmt.Fprintf(w, "pong")
 }
 
 func main() {
-   prometheus.MustRegister(pingCounter)
+	// Register Prometheus metrics handler
+	http.Handle("/metrics", promhttp.Handler())
 
-   http.HandleFunc("/ping", ping)
-   http.Handle("/metrics", promhttp.Handler())
-   http.ListenAndServe(":8090", nil)
+	// Register your ping handler
+	http.HandleFunc("/ping", ping)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	fmt.Printf("Server listening on :%s\n", port)
+	http.ListenAndServe(":"+port, nil)
 }

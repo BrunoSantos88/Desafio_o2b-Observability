@@ -1,0 +1,36 @@
+# Use the official Golang base image
+FROM golang:1.18
+
+# Set the working directory inside the container
+WORKDIR /go/src/app
+
+# Copy the local package files to the container's workspace
+COPY . .
+
+# Download and install any dependencies
+RUN go mod download
+
+# Install the Datadog Agent
+RUN DD_AGENT_MAJOR_VERSION=7 DD_AGENT_VERSION=7.31.1 bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)"
+
+# Set Datadog environment variables
+ENV DD_API_KEY=<YOUR_DATADOG_API_KEY>
+ENV DD_SITE=datadoghq.com
+
+# Copy Datadog configuration file
+COPY datadog.yaml /etc/datadog-agent/datadog.yaml
+
+# Expose Datadog ports
+EXPOSE 8125/udp
+EXPOSE 8126/tcp
+
+# Build the Go application
+RUN go mod init prom_example
+RUN go mod tidy
+RUN go build server.go
+
+# Expose port 8080 to the outside world
+EXPOSE 8080
+
+# Command to run the executable and Datadog Agent
+CMD ["sh", "-c", "./server & /opt/datadog-agent/bin/agent"]

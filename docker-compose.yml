@@ -36,23 +36,20 @@ services:
     - /sys:/sys:ro
     - /var/lib/docker/:/var/lib/docker:ro
   
-  goapp:
+  my-go-app:
     build:
       context: ./app
-      dockerfile: dockerfile
-    container_name: golangapp
-    volumes:
-      - ./GeoLite2-City.mmdb:/app/GeoLite2-City.mmdb
     ports:
-      - "8090:8090"
-    network_mode: "host"
-    
-  geoip:
-    build:
-      context: .
-      dockerfile: dockerfile
-    container_name: geoipexporter
-    ports:
-      - "9300:9300"
-    network_mode: "host"
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+    depends_on:
+      - jaeger
 
+  jaeger:
+    image: jaegertracing/all-in-one
+    ports:
+      - "16686:16686"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"

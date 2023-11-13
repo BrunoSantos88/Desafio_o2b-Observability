@@ -14,6 +14,3 @@ scrape_configs:
   - job_name: simple_server
     static_configs:
       - targets: ["localhost:8090"]
-  - job_name: 'GeoIPExporter'
-    static_configs:
-      - targets: ['localhost:9300']
