@@ -4,14 +4,12 @@ FROM golang:1.18 AS build
 WORKDIR /go/src/app
 
 # Copie apenas os arquivos necessários para obter e configurar as dependências
-COPY go.mod go.sum ./
-RUN go mod download
-
-# Copie o restante dos arquivos
 COPY . .
 
-# Compile o aplicativo
-RUN CGO_ENABLED=0 GOOS=linux go build -o server .
+RUN go mod init prom_example
+RUN go mod tidy
+RUN go build server.go
+
 
 # Estágio final
 FROM alpine:latest
