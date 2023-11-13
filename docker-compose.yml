@@ -1,6 +1,41 @@
 version: '3'
-
 services:
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    depends_on:
+      - node-exporter
+    network_mode: "host"
+
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - 9100:9100
+    network_mode: "host"
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    network_mode: "host"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+    - "8080:8080"
+    network_mode: "host"
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+  
   meu-app-go:
     build:
       context: .
@@ -8,7 +43,7 @@ services:
       - "8090:8090"
     depends_on:
       - jaeger
-    network_mode: host
+    network_mode: "host"
 
   jaeger:
     image: jaegertracing/all-in-one:latest
@@ -16,37 +51,6 @@ services:
       - "16686:16686"
       - "6831:6831/udp"
       - "6832:6832/udp"
-    network_mode: host
-
-  prometheus:
-    image: prom/prometheus:latest
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
-    depends_on:
-      - meu-app-go
-      - node-exporter
-    network_mode: host
-
-  grafana:
-    image: grafana/grafana:latest
-    ports:
-      - "3000:3000"
-    depends_on:
-      - prometheus
-    network_mode: host
-
-  cadvisor:
-    image: google/cadvisor:latest
-    ports:
-      - "8080:8080"
-    depends_on:
-      - meu-app-go
-    network_mode: host
-
-  node-exporter:
-    image: prom/node-exporter:latest
-    ports:
-      - "9100:9100"
-    network_mode: host
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+    network_mode: "host"

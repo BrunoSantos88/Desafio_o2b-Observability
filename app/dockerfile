@@ -1,26 +1,22 @@
-# Estágio de construção
-FROM golang:1.18 AS build
-
+FROM golang:1.18
 WORKDIR /go/src/app
-
-# Copie apenas os arquivos necessários para obter e configurar as dependências
 COPY . .
-
+RUN go get -u github.com/opentracing/opentracing-go
+RUN go get -u github.com/uber/jaeger-client-go
 RUN go mod init prom_example
 RUN go mod tidy
 RUN go build server.go
 
 
-# Estágio final
 FROM alpine:latest
 
 WORKDIR /app
 
-# Instale as dependências do Jaeger
+# Instale as dependências do Jaeger e Prometheus
 RUN apk add --no-cache ca-certificates
-
-# Copie apenas os artefatos de construção necessários do estágio de construção
+RUN apk add --no-cache libc6-compat
 COPY --from=build /go/src/app/server .
+COPY prometheus.yml .
 
 # Exponha a porta
 EXPOSE 8090
