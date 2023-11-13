@@ -1,10 +1,37 @@
-FROM golang:1.18
+# Estágio de construção
+FROM golang:1.18 AS build
+
 WORKDIR /go/src/app
+
+# Copie apenas os arquivos necessários para obter e configurar as dependências
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copie o restante dos arquivos
 COPY . .
-RUN go get -u github.com/opentracing/opentracing-go
-RUN go get -u github.com/uber/jaeger-client-go
-RUN go mod init prom_example
-RUN go mod tidy
-RUN go build server.go
-CMD ["./server"] 
+
+# Compile o aplicativo
+RUN CGO_ENABLED=0 GOOS=linux go build -o server .
+
+# Estágio final
+FROM alpine:latest
+
+WORKDIR /app
+
+# Instale as dependências do Jaeger
+RUN apk add --no-cache ca-certificates
+
+# Copie apenas os artefatos de construção necessários do estágio de construção
+COPY --from=build /go/src/app/server .
+
+# Exponha a porta
 EXPOSE 8090
+
+# Configure as variáveis de ambiente para o Jaeger
+ENV JAEGER_AGENT_HOST jaeger
+ENV JAEGER_AGENT_PORT 6831
+ENV JAEGER_SAMPLER_TYPE const
+ENV JAEGER_SAMPLER_PARAM 1
+
+# Comando padrão para iniciar o aplicativo
+CMD ["./server"]

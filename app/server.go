@@ -6,78 +6,58 @@ import (
 	"os"
 
 	"github.com/opentracing/opentracing-go"
-	"github.com/uber/jaeger-client-go"
-	"github.com/uber/jaeger-client-go/config"
-	"github.com/uber/jaeger-lib/metrics/prometheus"
-
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/uber/jaeger-client-go"
+	"github.com/uber/jaeger-client-go/config"
+	"github.com/uber/jaeger-lib/metrics"
 )
 
-var (
-	pingCounter = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
-			Name: "ping_request_count",
-			Help: "Number of requests handled by the Ping handler",
-		},
-		[]string{"status"},
-	)
+var pingCounter = prometheus.NewCounter(
+	prometheus.CounterOpts{
+		Name: "ping_request_count",
+		Help: "No of request handled by Ping handler",
+	},
 )
-
-func init() {
-	prometheus.MustRegister(pingCounter)
-
-	// Configure Jaeger tracer
-	cfg := &config.Configuration{
-		ServiceName: "my-go-app",
-		Sampler: &config.SamplerConfig{
-			Type:  "const",
-			Param: 1,
-		},
-		Reporter: &config.ReporterConfig{
-			LogSpans:      true,
-			AgentHostPort: "jaeger-agent:6831", // Adjust this to your Jaeger agent's address
-		},
-	}
-
-	metricsFactory := prometheus.New()
-	tracer, _, err := cfg.New(
-		"jaeger-go-app",
-		config.Logger(jaeger.StdLogger),
-		config.Metrics(metricsFactory),
-	)
-	if err != nil {
-		fmt.Println("Failed to initialize Jaeger tracer:", err)
-		return
-	}
-
-	opentracing.SetGlobalTracer(tracer)
-}
 
 func ping(w http.ResponseWriter, req *http.Request) {
-	// Start a new span for the ping operation
-	span := opentracing.StartSpan("ping")
+	pingCounter.Inc()
+
+	// Adiciona rastreamento ao manipulador "ping"
+	span, ctx := opentracing.StartSpanFromContext(req.Context(), "ping-handler")
 	defer span.Finish()
-
-	pingCounter.WithLabelValues("success").Inc()
-
-	// Your logic here
 
 	fmt.Fprintf(w, "pong")
 }
 
 func main() {
-	// Register Prometheus metrics handler
-	http.Handle("/metrics", promhttp.Handler())
+	prometheus.MustRegister(pingCounter)
 
-	// Register your ping handler
-	http.HandleFunc("/ping", ping)
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	// Configuração do Jaeger
+	cfg := &config.Configuration{
+		ServiceName: "meu-app-go",
+		Sampler: &config.SamplerConfig{
+			Type:  "const",
+			Param: 1,
+		},
+		Reporter: &config.ReporterConfig{
+			LogSpans: true,
+		},
 	}
 
-	fmt.Printf("Server listening on :%s\n", port)
-	http.ListenAndServe(":"+port, nil)
+	tracer, closer, err := cfg.NewTracer(
+		config.Logger(jaeger.StdLogger),
+		config.Metrics(metrics.NullFactory),
+	)
+	if err != nil {
+		fmt.Printf("Erro ao criar o tracer: %v\n", err)
+		os.Exit(1)
+	}
+	defer closer.Close()
+
+	opentracing.SetGlobalTracer(tracer)
+
+	http.HandleFunc("/ping", ping)
+	http.Handle("/metrics", promhttp.Handler())
+	http.ListenAndServe("0.0.0.0:8090", nil)
 }
