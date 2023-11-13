@@ -1,4 +1,4 @@
-# Prometheus-Dockerizado
+# Prometheus-Dockerizado Lab
 
 # Clona repository
 
