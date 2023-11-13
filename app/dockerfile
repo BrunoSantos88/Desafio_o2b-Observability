@@ -6,26 +6,5 @@ RUN go get -u github.com/uber/jaeger-client-go
 RUN go mod init prom_example
 RUN go mod tidy
 RUN go build server.go
-
-
-FROM alpine:latest
-
-WORKDIR /app
-
-# Instale as dependências do Jaeger e Prometheus
-RUN apk add --no-cache ca-certificates
-RUN apk add --no-cache libc6-compat
-COPY --from=build /go/src/app/server .
-COPY prometheus.yml .
-
-# Exponha a porta
+CMD ["./server"] 
 EXPOSE 8090
-
-# Configure as variáveis de ambiente para o Jaeger
-ENV JAEGER_AGENT_HOST jaeger
-ENV JAEGER_AGENT_PORT 6831
-ENV JAEGER_SAMPLER_TYPE const
-ENV JAEGER_SAMPLER_PARAM 1
-
-# Comando padrão para iniciar o aplicativo
-CMD ["./server"]
