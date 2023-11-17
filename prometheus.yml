@@ -3,8 +3,7 @@ global:
 
 rule_files:
   - "alert.rules.yml"
-
-
+  
 alerting:
   alertmanagers:
     - static_configs:
