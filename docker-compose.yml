@@ -12,9 +12,6 @@ services:
     image: prom/prometheus
     ports:
       - 9090:9090
-    links:
-      - cadvisor:cadvisor
-      - alertmanager:alertmanager
     depends_on:
       - cadvisor
       - node-exporter
@@ -23,11 +20,6 @@ services:
       - ./alert_rules.yml:/etc/prometheus/alert_rules.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: 0.5G
     network_mode: "host"
 
   node-exporter:
@@ -47,7 +39,6 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    restart: unless-stopped
     network_mode: "host"
  
   alertmanager:
