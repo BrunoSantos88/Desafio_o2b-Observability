@@ -1,0 +1,30 @@
+groups:
+- name: example
+  rules:
+  - alert: InstanceDown
+    expr: up == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Instance {{ $labels.instance }} down"
+      description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute."
+      link: "<https://monitoring.yourdomain.com/>"
+- alert: HighCPUUsage
+    expr: (100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 85
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High CPU usage on {{ $labels.instance }}"
+      description: "{{ $labels.instance }} has had >85% CPU usage for more than 5 minutes."
+      link: "<https://monitoring.yourdomain.com/>"
+- alert: HighRAMUsage
+    expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High RAM usage on {{ $labels.instance }}"
+      description: "{{ $labels.instance }} has had an average RAM usage of >85% for the last 5 minutes."
+      link: "<https://monitoring.yourdomain.com/>"
