@@ -10,3 +10,7 @@
 - Prometheus
 - cadvisor
 - aplicação go
+
+# Link de Estudos
+
+Link: https://dev.to/danielfavour/container-monitoring-ensuring-application-performance-and-health-kcj
