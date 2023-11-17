@@ -17,7 +17,7 @@ services:
       - node-exporter
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./alert_rules.yml:/etc/prometheus/alert_rules.yml
+      - ./alert_rules.yml:/etc/prometheus/alert.rules.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     network_mode: "host"

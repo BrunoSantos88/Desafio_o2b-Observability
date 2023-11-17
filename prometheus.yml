@@ -4,7 +4,9 @@ global:
     monitor: 'docker-container-monitor'
 
 rule_files:
- - rules.yml
+  - "/etc/prometheus/alert.rules.yml"
+  # - "first_rules.yml"
+  # - "second_rules.yml"
 
 alerting:
   alertmanagers:

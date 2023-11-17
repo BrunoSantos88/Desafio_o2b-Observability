@@ -1,6 +1,10 @@
 groups:
- - name: example
-   rules:
-   - alert: InstanceDown
-     expr: up == 0
-     for: 1m
+   - name: node_alerts
+     rules:
+     - alert: InstanceDown
+       expr: up{job="node_exporter"} == 0
+       for: 1m
+       labels:
+         severity: critical
+       annotations:
+         summary: Host {{ $labels.instance }} of {{ $labels.job }}
