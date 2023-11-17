@@ -1,14 +1,16 @@
 global:
   scrape_interval: 5s
+  external_labels:
+    monitor: 'docker-container-monitor'
 
 rule_files:
-  - "alert.rules.yml"
-  
+ - rules.yml
+
 alerting:
   alertmanagers:
-    - static_configs:
-      - targets:
-        - localhost:9093
+  - static_configs:
+    - targets:
+      - alertmanager:9093
 
 scrape_configs:
   - job_name: 'prometheus'
@@ -23,3 +25,8 @@ scrape_configs:
   - job_name: simple_server
     static_configs:
       - targets: ["localhost:8090"]
+  - job_name: docker
+    scrape_interval: 5s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['host.docker.internal:9323']  
