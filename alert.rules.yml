@@ -1,0 +1,11 @@
+groups:
+- name: node-exporter
+  rules:
+  - alert: HighMemoryUsage
+    expr: 100 - ((node_memory_MemAvailable_bytes{instance="localhost:9100",job="node-exporter"} * 100) / node_memory_MemTotal_bytes{instance="localhost:9100",job="node-exporter"}) > 90
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High Memory Usage"
+      description: " of memory is used - Host: "
