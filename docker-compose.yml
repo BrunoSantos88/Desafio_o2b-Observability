@@ -59,4 +59,11 @@ services:
     container_name: grafana
     ports:
       - 3000:3000
+    restart: unless-stopped
+    volumes:
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - grafana-data:/var/lib/grafana
     network_mode: "host"
+
+volumes:
+  grafana-data:
