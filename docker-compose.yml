@@ -19,8 +19,8 @@ services:
       - cadvisor
       - node-exporter
     volumes:
-      - ./promethues/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert_rules.yml:/etc/prometheus/alert_rules.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     deploy:
@@ -61,7 +61,7 @@ services:
     ports:
      - '9093:9093'
     volumes:
-      - ./prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
       - ./alertmanager/alertmanager-data:/data
     command:
       - --config.file=/etc/alertmanager/alertmanager.yml
