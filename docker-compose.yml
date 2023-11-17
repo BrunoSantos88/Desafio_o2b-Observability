@@ -12,13 +12,17 @@ services:
     image: prom/prometheus
     ports:
       - 9090:9090
+    links:
+      - cadvisor:cadvisor
+      - alertmanager:alertmanager
+    depends_on:
+      - cadvisor
+      - node-exporter
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./alert_rules.yml:/etc/prometheus/alert_rules.yml
+      - ./promethues/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-    depends_on:
-      - node-exporter
     deploy:
       resources:
         limits:
@@ -57,7 +61,7 @@ services:
     ports:
      - '9093:9093'
     volumes:
-      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - ./prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml
       - ./alertmanager/alertmanager-data:/data
     command:
       - --config.file=/etc/alertmanager/alertmanager.yml
