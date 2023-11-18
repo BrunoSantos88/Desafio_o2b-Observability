@@ -13,7 +13,7 @@
 - node-exporte
 - aplicação go
 
-# Link de Estudos
+# Link Guias
 
 - Setup observability
 - Link: https://dev.to/danielfavour/container-monitoring-ensuring-application-performance-and-health-kcj
