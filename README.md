@@ -16,7 +16,7 @@
 # Link de Estudos
 
 - Setup observability
-Link: https://dev.to/danielfavour/container-monitoring-ensuring-application-performance-and-health-kcj
+- Link: https://dev.to/danielfavour/container-monitoring-ensuring-application-performance-and-health-kcj
 
-- Alert
+- Alert Manager
 - Link: https://samber.github.io/awesome-prometheus-alerts/rules.html#docker-containers
