@@ -9,6 +9,8 @@
 - Grafana
 - Prometheus
 - cadvisor
+- alertmanager
+- node-exporte
 - aplicação go
 
 # Link de Estudos
