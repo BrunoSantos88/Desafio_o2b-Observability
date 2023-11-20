@@ -28,32 +28,6 @@ groups:
          severity: critical
        annotations:
          summary: Host {{ $labels.instance }} of {{ $labels.job }}
-  
-
-   - name: operations-team
-     rules:
-     - alert: InstanceDown
-       expr: up == 0
-       for: 30s
-       labels:
-          severity: page
-       annotations:
-          summary: "Instance {‌{ $labels.instance }} down"
-          description: "{‌{ $labels.instance }} of job {‌{ $labels.job }} has been down for more than 30s."
-
-   - name: AllInstances
-     rules:
-     - alert: InstanceDown
-    # Condition for alerting
-       expr: up == 0
-       for: 1m
-    # Annotation - additional informational labels to store more information
-       annotations:
-         title: 'Instance {{ $labels.instance }} down'
-         description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute.'
-       # Labels - additional labels to be attached to the alert
-       labels:
-         severity: 'critical'
 
 
   #ContainersAlert
@@ -138,4 +112,4 @@ groups:
         annotations:
           summary: Container absent (instance {{ $labels.instance }})
           description: "A container is absent for 5 min\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
-        
+          
