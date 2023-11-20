@@ -1,17 +1,51 @@
-template_files: {}
-alertmanager_config: |
-  global:
-    resolve_timeout: 1s
-    slack_api_url: 'https://hooks.slack.com/services/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'
+global:
+  resolve_timeout: 5m
 
-  route:
-    receiver: 'slack-notifications'
-    repeat_interval: 1s
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'slack-notifications'
+receivers:
+- name: 'slack-notifications'
+  slack_configs:
+  - api_url: "https://hooks.slack.com/services/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"
+    channel: '#aplication'
+    send_resolved: true
 
-  receivers:
-  - name: 'slack-notifications'
-    slack_configs:
-    - channel: '#aplicaton'
-      send_resolved: true
-      title: "{{ range .Alerts }}{{ .Annotations.summary }}\n{{ end }}"
-      text: "{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}"  
+    icon_url: https://avatars3.githubusercontent.com/u/3380462
+    title: |-
+      [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }} for {{ .CommonLabels.job }}
+      {{- if gt (len .CommonLabels) (len .GroupLabels) -}}
+        {{" "}}(
+        {{- with .CommonLabels.Remove .GroupLabels.Names }}
+          {{- range $index, $label := .SortedPairs -}}
+            {{ if $index }}, {{ end }}
+            {{- $label.Name }}="{{ $label.Value -}}"
+          {{- end }}
+        {{- end -}}
+        )
+      {{- end }}
+    text: >-
+      {{ with index .Alerts 0 -}}
+        :chart_with_upwards_trend: *<{{ .GeneratorURL }}|Graph>*
+        {{- if .Annotations.runbook }}   :notebook: *<{{ .Annotations.runbook }}|Runbook>*{{ end }}
+      {{ end }}
+
+      *Alert details*:
+
+      {{ range .Alerts -}}
+        *Alert:* {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+      *Description:* {{ .Annotations.description }}
+      *Details:*
+        {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+        {{ end }}
+      {{ end }}
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
