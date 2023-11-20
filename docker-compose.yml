@@ -54,6 +54,25 @@ services:
       # - '--storage.path=/alertmanager'
     network_mode: "host"
 
+  alertmanager-bot:
+    image: metalmatze/alertmanager-bot:0.4.0
+    container_name: alertmanager-bot
+    depends_on:
+    - alertmanager
+    environment:
+      LISTEN_ADDR: 0.0.0.0:8081
+      ALERTMANAGER_URL: http://alertmanager:9093
+      BOLT_PATH: /data/bot.db
+      STORE: bolt
+      TELEGRAM_ADMIN: '1234567'
+      TELEGRAM_TOKEN: 6448976920:AAEa0qZ3AGuZWYk6B1cQ0uMMEyvsx3vYNgU
+      TEMPLATE_PATHS: /templates/default.tmpl
+    ports:
+    - 8081:8081
+    volumes:
+    - alertmanager-bot-volume:/data
+    network_mode: "host"
+
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -67,3 +86,4 @@ services:
 
 volumes:
   grafana-data:
+  alertmanager-bot-volume:
