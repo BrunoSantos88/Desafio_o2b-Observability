@@ -1,23 +1,12 @@
 global:
-  smtp_smarthost: 'smtp.gmail.com:587'
-  smtp_from: 'infratidevops2@gmail.com'
-  smtp_auth_identity: 'infratidevops2@gmail.com'
-  smtp_require_tls: true
- 
+resolve_timeout: 1m
+slack_api_url: 'https://hooks.slack.com/services/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'
+
 route:
-  # Cuidado - intevalo abaixo muito curto. 
-  repeat_interval: 1m 
-  receiver: operations-team
- 
+receiver: 'slack-notifications'
+
 receivers:
-- name: 'operations-team'
-  email_configs:
-  - to: 'email_Do_Destinatario@dominio.com.br'
-    auth_username: 'infratidevops2@gmail.com'
-    auth_password: '*Mulekao1988*'
-    send_resolved: true
-- name: 'operations-team'
-  slack_configs:
-  - api_url:  https://hooks.slack.com/services/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
-    channel: '#prometheus'
-    send_resolved: true
+- name: 'slack-notifications'
+slack_configs:
+- channel: '#monitoring-instances'
+send_resolved: true
