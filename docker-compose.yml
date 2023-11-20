@@ -63,8 +63,6 @@ services:
     volumes:
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - grafana-data:/var/lib/grafana
-    depends_on:
-    - prometheus
     network_mode: "host"
 
 volumes:
