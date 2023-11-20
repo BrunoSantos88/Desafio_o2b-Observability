@@ -15,7 +15,6 @@ services:
     depends_on:
       - cadvisor
       - node-exporter
-      - alertmanager
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./alert_rules.yml:/etc/prometheus/alert.rules.yml
