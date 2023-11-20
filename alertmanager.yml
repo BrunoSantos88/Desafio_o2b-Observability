@@ -1,18 +1,7 @@
-route:
-  group_by: [cluster]
-  receiver: alert-test
-  group_interval: 30s
-  repeat_interval: 30s
-  routes:
-    - match:
-        severity: slack
-        receiver: alert-test
-
 receivers:
-- name: alert-test
-  slack_configs:
-  - api_url: https://hooks.slack.com/services/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
-    channel: '#promethues'
-    icon_url: https://avatars3.githubusercontent.com/u/3380462
-    send_resolved: true
-    text: "<!channel> \nsummary: {{ .CommonAnnotations.summary }}\ndescription: {{ .CommonAnnotations.description }}"
+  - name: 'slack-notifications'
+    slack_configs:
+      - send_resolved: true
+        username: 'alertmanager'
+        channel: '#promethues'
+        api_url: 'https://hooks.slack.com/services/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'
