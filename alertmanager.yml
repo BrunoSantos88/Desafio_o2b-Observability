@@ -1,19 +1,17 @@
-route:
-  group_by: [cluster]
-  receiver: alert-test
-  group_interval: 1s
-  repeat_interval: 5s
+template_files: {}
+alertmanager_config: |
+  global:
+    resolve_timeout: 1s
+    slack_api_url: 'https://hooks.slack.com/services/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'
 
-  routes:
-    - match:
-        severity: slack
-        receiver: alert-test
+  route:
+    receiver: 'slack-notifications'
+    repeat_interval: 1s
 
-receivers:
-- name: alert-test
-  slack_configs:
-  - api_url: https://hooks.slack.com/services/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
-    channel: '#alertmanager'
-    icon_url: https://avatars3.githubusercontent.com/u/3380462
-    send_resolved: true
-    text: "<!channel> \nsummary: {{ .CommonAnnotations.summary }}\ndescription: {{ .CommonAnnotations.description }}"
+  receivers:
+  - name: 'slack-notifications'
+    slack_configs:
+    - channel: '#aplicaton'
+      send_resolved: true
+      title: "{{ range .Alerts }}{{ .Annotations.summary }}\n{{ end }}"
+      text: "{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}"  
