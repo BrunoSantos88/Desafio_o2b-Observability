@@ -11,7 +11,7 @@ route:
 receivers:
 - name: alert-test
   slack_configs:
-  - api_url: https://hooks.slack.com/services/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
+  - api_url: https://hooks.slack.com/services/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
     channel: '#alertmanager'
     icon_url: https://avatars3.githubusercontent.com/u/3380462
     send_resolved: true
