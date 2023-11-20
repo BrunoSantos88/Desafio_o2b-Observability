@@ -20,3 +20,6 @@
 
 - Alert Manager
 - Link: https://samber.github.io/awesome-prometheus-alerts/rules.html#docker-containers
+
+- Geoip
+- link: https://github.com/gree-gorey/geoip-exporter
