@@ -4,4 +4,4 @@ receivers:
       - send_resolved: true
         username: 'alertmanager'
         channel: '#promethues'
-        api_url: 'https://hooks.slack.com/services/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'
+        api_url: https://hooks.slack.com/services/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
