@@ -5,13 +5,12 @@
 - Acessar pasta Prometheus-Dockerizado
 - commando docker-compose up -d
 
-#  Docker-Compose Serviços
-- Grafana
+- Linux (baseado no Ubuntu)
+- Docker
+- Golang
 - Prometheus
-- cadvisor
-- alertmanager
-- node-exporte
-- aplicação go
+- Grafana
+- Alertmanager
 
 # Link Guias
 
