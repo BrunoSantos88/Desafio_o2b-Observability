@@ -3,7 +3,7 @@ groups:
   rules:
   - alert: InstanceDown
     expr: up == 0
-    for: 1m
+    for: 1s
     labels:
       severity: "critical"
     annotations:
@@ -12,7 +12,7 @@ groups:
   
   - alert: HostOutOfMemory
     expr: node_memory_MemAvailable / node_memory_MemTotal * 100 < 25
-    for: 5m
+    for: 1s
     labels:
       severity: warning
     annotations:
@@ -32,7 +32,7 @@ groups:
 
   - alert: HostHighCpuLoad
     expr: (sum by (instance) (irate(node_cpu{job="node_exporter_metrics",mode="idle"}[5m]))) > 80
-    for: 5m
+    for: 1s
     labels:
       severity: warning
     annotations:

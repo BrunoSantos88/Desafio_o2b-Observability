@@ -3,9 +3,9 @@ global:
 
 route:
   group_by: ['alertname']
-  group_wait: 10s
-  group_interval: 10s
-  repeat_interval: 1h
+  group_wait: 1s
+  group_interval: 3s
+  repeat_interval: 5s
   receiver: 'slack-notifications'
 receivers:
 - name: 'slack-notifications'
