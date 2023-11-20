@@ -15,6 +15,7 @@ services:
     depends_on:
       - cadvisor
       - node-exporter
+      - alertmanager
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./alert_rules.yml:/etc/prometheus/alert.rules.yml
@@ -63,6 +64,8 @@ services:
     volumes:
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - grafana-data:/var/lib/grafana
+    depends_on:
+    - prometheus
     network_mode: "host"
 
 volumes:
