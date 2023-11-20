@@ -9,8 +9,14 @@
 - Grafana
 - Prometheus
 - cadvisor
+- alertmanager
+- node-exporte
 - aplicação go
 
-# Link de Estudos
+# Link Guias
 
-Link: https://dev.to/danielfavour/container-monitoring-ensuring-application-performance-and-health-kcj
+- Setup observability
+- Link: https://dev.to/danielfavour/container-monitoring-ensuring-application-performance-and-health-kcj
+
+- Alert Manager
+- Link: https://samber.github.io/awesome-prometheus-alerts/rules.html#docker-containers
