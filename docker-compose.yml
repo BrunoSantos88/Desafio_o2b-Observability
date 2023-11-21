@@ -8,38 +8,37 @@ services:
       - "8090:8090"
     network_mode: "host"
 
-  jenkins:
-    image: jenkins_master
-    build: 
-      context: ./jenkins/
-      dockerfile: Dockerfile    
-    restart: always
-    ports:
-      - 50000:50000
-      - 8080:8080
-    volumes:
-      - jenkins_data:/var/jenkins_home
-    network_mode: "host"
-
   prometheus:
     image: prom/prometheus
     ports:
       - 9090:9090
     depends_on:
+      - cadvisor
       - meu-app-go
     volumes:
-      - prometheus_data:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./alert_rules.yml:/etc/prometheus/alert.rules.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     network_mode: "host"
 
-
   node-exporter:
     image: prom/node-exporter
     ports:
       - 9100:9100
+    network_mode: "host"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - 8080:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     network_mode: "host"
  
   alertmanager:
@@ -63,9 +62,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - grafana-data:/var/lib/grafana
     network_mode: "host"
 
 volumes:
   grafana-data:
-  jenkins_data:
-  prometheus_data:
