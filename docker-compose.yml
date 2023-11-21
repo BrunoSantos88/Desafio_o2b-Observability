@@ -22,15 +22,15 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     network_mode: "host"
 
-  github-exporter:
-    tty: true
-    stdin_open: true
-    expose:
-      - 9171:9171
-    image: infinityworks/github-exporter:latest
+  
+  github_exporter:
+    image: promhippie/github-exporter:latest
+    restart: always
     environment:
-      - REPOS=Prometheus-Dockerizado
-      - GITHUB_TOKEN=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
+      - GITHUB_EXPORTER_TOKEN=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
+      - GITHUB_EXPORTER_LOG_PRETTY=true
+      - GITHUB_EXPORTER_ORG=BrunoSantos88/Prometheus-Dockerizado
+      - GITHUB_EXPORTER_REPO=BrunoSantos88/Prometheus-Dockerizado
 
   node-exporter:
     image: prom/node-exporter
