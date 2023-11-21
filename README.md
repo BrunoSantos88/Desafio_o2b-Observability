@@ -37,7 +37,7 @@ A maioria dos componentes do Prometheus são escritos em Go , tornando-os fácei
 - Acessar pasta Prometheus-Dockerizado
 - commando docker-compose up -d
   
-#killeKada
+# killeeKoda
 - Linux (baseado no Ubuntu)
 - Docker
 - Golang
