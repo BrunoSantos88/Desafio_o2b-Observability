@@ -31,14 +31,11 @@ scrape_configs:
     metrics_path: /metrics
     static_configs:
       - targets: ["localhost:8090"]
-  - job_name: 'Jenkins'
-    metrics_path: /prometheus
-    scheme: http
-    tls_config:
-      insecure_skip_verify: true
+  - job_name: simple_server
+    scrape_interval: 5s
+    metrics_path: /metrics
     static_configs:
-      - targets: ['jenkins:8080']
-    basic_auth:
-      username: 'admin'
-      password: 'admin'
+      - targets: ["localhost:8091"]
+  
+  
  
