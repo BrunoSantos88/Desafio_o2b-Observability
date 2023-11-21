@@ -25,5 +25,5 @@ func main() {
 
 	http.HandleFunc("/ping", ping)
 	http.Handle("/metrics", promhttp.Handler())
-	http.ListenAndServe(":8091", nil)
+	http.ListenAndServe(":8090", nil)
 }
