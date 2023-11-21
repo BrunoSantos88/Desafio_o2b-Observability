@@ -25,7 +25,8 @@ services:
   
   github_exporter:
     image: promhippie/github-exporter:latest
-    restart: always
+    ports:
+      - 9504:9504
     environment:
       - GITHUB_EXPORTER_TOKEN=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
       - GITHUB_EXPORTER_LOG_PRETTY=true
