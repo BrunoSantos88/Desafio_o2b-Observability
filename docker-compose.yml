@@ -14,7 +14,7 @@ services:
       - 9090:9090
     depends_on:
       - cadvisor
-      - node-exporter
+      - meu-app-go
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./alert_rules.yml:/etc/prometheus/alert.rules.yml
@@ -22,6 +22,7 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     network_mode: "host"
 
+<<<<<<< HEAD
   github-exporter:
      tty: true
      stdin_open: true
@@ -40,6 +41,8 @@ services:
       - 9100:9100
     network_mode: "host"
 
+=======
+>>>>>>> e59ee3c43b8950f73a551bce6a9c619902c5968d
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
