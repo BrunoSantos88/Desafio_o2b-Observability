@@ -36,6 +36,7 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     network_mode: "host"
 
+
   node-exporter:
     image: prom/node-exporter
     ports:
@@ -76,10 +77,9 @@ services:
     restart: unless-stopped
     volumes:
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-      - grafana-data:/var/lib/grafana
     network_mode: "host"
 
 volumes:
-    prometheus_data: {}
-    grafana_data: {}
-    jenkins_data: {}
+  grafana-data:
+  jenkins_data:
+  prometheus_data:
