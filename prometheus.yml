@@ -34,5 +34,5 @@ scrape_configs:
   - job_name: github
     scrape_interval: 5s
     static_configs:
-    - targets: ["github_exporter:9504"]
+    - targets: ["localhost:9504"]
  
