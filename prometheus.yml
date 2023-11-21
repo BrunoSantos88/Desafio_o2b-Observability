@@ -31,4 +31,8 @@ scrape_configs:
     metrics_path: /metrics
     static_configs:
       - targets: ["localhost:8090"]
+  - job_name: github
+    scrape_interval: 5s
+    static_configs:
+    - targets: ["github_exporter:9504"]
  
