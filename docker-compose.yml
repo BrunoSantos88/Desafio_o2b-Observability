@@ -24,7 +24,8 @@ services:
 
   
   github_exporter:
-    image: promhippie/github-exporter:1.0.0
+    image: promhippie/github-exporter:latest
+    restart: always
     ports:
       - 9504:9504
     environment:
