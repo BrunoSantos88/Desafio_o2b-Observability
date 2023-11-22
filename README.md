@@ -30,7 +30,32 @@ Prometheus é um kit de ferramentas de alerta e monitoramento de sistemas de có
 - Alert Manager
 - Link: https://samber.github.io/awesome-prometheus-alerts/rules.html#docker-containers
 
+# Node_exported install
+- curl -LO https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
+- tar -xvf node_exporter-0.18.1.linux-amd64.tar.gz
+- mv node_exporter-0.18.1.linux-amd64/node_exporter /usr/local/bin/
+- useradd -rs /bin/false node_exporter
+- nano /etc/systemd/system/node_exporter.service
 
+[Unit]
+Description=Node Exporter
+After=network.target
+
+</p>
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=multi-user.target
+</p>
+
+- systemctl daemon-reload
+- systemctl start node_exporter
+- systemctl enable node_exporter
+- acessar http://<server-IP>:9100/metrics
 # Promethues 
 - Link https://prometheus.io/docs/introduction/overview/
 
