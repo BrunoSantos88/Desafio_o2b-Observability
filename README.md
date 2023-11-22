@@ -40,7 +40,8 @@ A maioria dos componentes do Prometheus são escritos em Go , tornando-os fácei
 
 # Install
 
-pip install Flask prometheus_client
+- pip install Flask prometheus_client
+- python python-app/app.py
   
 # killerKoda
 - Linux (baseado no Ubuntu)
