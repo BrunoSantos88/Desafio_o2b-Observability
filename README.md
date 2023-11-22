@@ -59,5 +59,12 @@ WantedBy=multi-user.target </p>
 # Promethues 
 - Link https://prometheus.io/docs/introduction/overview/
 
+# Rules
+- Link https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+
+# AlertMaanager
+
+- Link: https://prometheus.io/docs/alerting/latest/alertmanager/
+
 # Webhook
 - Link https://webhook.site/#!/49627f3d-1930-47af-8c80-2a63f9378bcd/1140d711-fad3-4189-8e9e-f1a6b706d7a3/1
