@@ -1,4 +1,4 @@
-O que é Prometeu?
+O que é Prometeus?
 Prometheus é um kit de ferramentas de alerta e monitoramento de sistemas de código aberto originalmente desenvolvido no SoundCloud . Desde a sua criação em 2012, muitas empresas e organizações adotaram o Prometheus, e o projeto tem uma comunidade de desenvolvedores e usuários muito ativa . Agora é um projeto independente de código aberto e mantido de forma independente por qualquer empresa. Para enfatizar isso e esclarecer a estrutura de governança do projeto, o Prometheus juntou-se à Cloud Native Computing Foundation em 2016 como o segundo projeto hospedado, depois do Kubernetes .
 
 O Prometheus coleta e armazena suas métricas como dados de séries temporais, ou seja, as informações das métricas são armazenadas com o carimbo de data e hora em que foram registradas, juntamente com pares de valores-chave opcionais chamados rótulos.
@@ -54,11 +54,9 @@ A maioria dos componentes do Prometheus são escritos em Go , tornando-os fácei
 - Alert Manager
 - Link: https://samber.github.io/awesome-prometheus-alerts/rules.html#docker-containers
 
-- Geoip
-- link: https://github.com/gree-gorey/geoip-exporter
 
 # Promethues 
 - Link https://prometheus.io/docs/introduction/overview/
 
-# Jenkins Prometheus
-- Link: https://github.com/yosoyfunes/jenkins-prometheus-grafana.git
+# Webhook
+- Link https://webhook.site/#!/49627f3d-1930-47af-8c80-2a63f9378bcd/1140d711-fad3-4189-8e9e-f1a6b706d7a3/1
