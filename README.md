@@ -44,7 +44,8 @@ A maioria dos componentes do Prometheus são escritos em Go , tornando-os fácei
 - Prometheus
 - Grafana
 - Alertmanager
-
+- python
+  
 # Link Guias
 
 - Setup observability
