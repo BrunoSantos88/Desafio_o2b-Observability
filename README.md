@@ -42,14 +42,14 @@ Description=Node Exporter
 After=network.target
 
 </p>
-[Service]
-User=node_exporter
-Group=node_exporter
-Type=simple
-ExecStart=/usr/local/bin/node_exporter
+[Service] </p>
+User=node_exporter  </p>
+Group=node_exporter </p>
+Type=simple </p>
+ExecStart=/usr/local/bin/node_exporter </p>
 
-[Install]
-WantedBy=multi-user.target
+[Install] </p>
+WantedBy=multi-user.target </p>
 </p>
 
 - systemctl daemon-reload
