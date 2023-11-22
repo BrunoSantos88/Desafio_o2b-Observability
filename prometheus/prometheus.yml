@@ -18,11 +18,11 @@ scrape_configs:
   - job_name: 'node-exporter'
     static_configs:
       - targets: ['localhost:9100']
-  - job_name: simple_server
+  - job_name: python_server
     scrape_interval: 5s
     metrics_path: /metrics
     static_configs:
-      - targets: ["localhost:8090"]
+      - targets: ["localhost:3001"]
   
   
  
