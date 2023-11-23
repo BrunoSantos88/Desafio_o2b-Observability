@@ -46,7 +46,7 @@ services:
       - 3000:3000
     restart: unless-stopped
     volumes:
-      - ./prometheus_ds.yml:/etc/grafana/provisioning/datasources
+      - ./datasources:/etc/grafana/provisioning/datasources
       - grafana-data:/var/lib/grafana
     network_mode: "host"
 
