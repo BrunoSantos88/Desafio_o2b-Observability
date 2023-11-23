@@ -166,3 +166,6 @@ receivers:
 
 # install node_exported
 Link: https://developer.couchbase.com/tutorial-node-exporter-setup
+
+# Grafana Dashbord
+Link: https://grafana.com/grafana/dashboards/
