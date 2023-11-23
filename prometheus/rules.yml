@@ -36,3 +36,37 @@ groups:
      annotations:
         summary: High network traffic on host {{ $labels.instance }}
         description: The inbound network traffic on host {{$labels.instance }} has exceeded 100 MB/s for 5 seconds
+
+ #docker Services
+  
+   -  alert: CadvisorContainerDown
+      expr: up{job="cadvisor"} == 0
+      labels:
+         severity: 'critical'
+      annotations:
+         summary: 'Alert: Cadvisor container is down'
+         description: 'The Cadvisor container is down or not responding.'
+
+   -  alert: PromethesContainerDown
+      expr: up{job="promethues"} == 0
+      labels:
+         severity: 'critical'
+      annotations:
+         summary: 'Alert: Prometheus container is down'
+         description: 'The Prometheus container is down or not responding.'
+   
+   -  alert: python_serverContainerDown
+      expr: up{job="python_server"} == 0
+      labels:
+         severity: 'critical'
+      annotations:
+         summary: 'Alert: python_server container is down'
+         description: 'The python_server container is down or not responding.'
+
+   -  alert: NodeContainerDown
+      expr: up{job="node"} == 0
+      labels:
+         severity: 'critical'
+      annotations:
+         summary: 'Alert: node exported container is down'
+         description: 'The node exported is down or not responding.'
