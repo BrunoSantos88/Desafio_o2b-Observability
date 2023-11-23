@@ -111,7 +111,7 @@ WantedBy=multi-user.target
 #Execute
 sudo chmod 664 /usr/lib/systemd/system/node_exporter.service
 
-# Recaregar e Start
+# Recarregar e Start
 sudo systemctl daemon-reload
 sudo systemctl start node_exporter
 
