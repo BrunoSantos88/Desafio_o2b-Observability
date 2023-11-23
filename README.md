@@ -3,16 +3,17 @@ Prometheus é um kit de ferramentas de alerta e monitoramento de sistemas de có
 
 # Clona repository
 
-- Acessar pasta Desafio_o2b
-- docker-compose up -d
+``` Acessar pasta Desafio_o2b
+docker-compose up -d
+``` 
 
 # Install
-
-- pip install Flask prometheus_client
-
-# Excutar
--  python python-app/app.py
-  
+``` Dependencias
+ pip install Flask prometheus_client
+``` 
+``` Excutar
+  python python-app/app.py
+```   
 # killerKoda
 - Linux (baseado no Ubuntu)
 - Docker
@@ -31,17 +32,20 @@ Prometheus é um kit de ferramentas de alerta e monitoramento de sistemas de có
 - Link: https://samber.github.io/awesome-prometheus-alerts/rules.html#docker-containers
 
 # Node_exported install
-- curl -LO https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
-- tar -xvf node_exporter-0.18.1.linux-amd64.tar.gz
-- mv node_exporter-0.18.1.linux-amd64/node_exporter /usr/local/bin/
-- useradd -rs /bin/false node_exporter
-- nano /etc/systemd/system/node_exporter.service
+
+``` install node_exporter
+
+curl -LO https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
+tar -xvf node_exporter-0.18.1.linux-amd64.tar.gz
+mv node_exporter-0.18.1.linux-amd64/node_exporter /usr/local/bin/
+useradd -rs /bin/false node_exporter
+
+nano /etc/systemd/system/node_exporter.service
 
 [Unit]
 Description=Node Exporter
 After=network.target
 
-</p>
 [Service] </p>
 User=node_exporter  </p>
 Group=node_exporter </p>
@@ -50,12 +54,13 @@ ExecStart=/usr/local/bin/node_exporter </p>
 
 [Install] </p>
 WantedBy=multi-user.target </p>
-</p>
 
-- systemctl daemon-reload
-- systemctl start node_exporter
-- systemctl enable node_exporter
-- acessar http://<server-IP>:9100/metrics
+systemctl daemon-reload
+systemctl start node_exporter
+systemctl enable node_exporter
+curl http://<server-IP>:9100/metrics
+``` 
+
 # Promethues 
 - Link https://prometheus.io/docs/introduction/overview/
 
