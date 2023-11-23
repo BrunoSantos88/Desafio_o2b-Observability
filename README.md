@@ -169,3 +169,8 @@ Link: https://developer.couchbase.com/tutorial-node-exporter-setup
 
 # Grafana Dashbord
 Link: https://grafana.com/grafana/dashboards/
+
+# Install Stress
+
+````
+sudo apt-get install stress-ng -y
