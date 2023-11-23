@@ -162,7 +162,15 @@ scrape_configs:
 ````
   groups:
  - name: Count greater than 5
-   rules:
+   rules:global:
+  resolve_timeout: 5m
+route:
+  receiver: webhook_receiver
+receivers:
+    - name: webhook_receiver
+      webhook_configs:
+        - url: 'https://webhook.site/49627f3d-1930-47af-8c80-2a63f9378bcd'
+          send_resolved: false
    - alert: CountGreaterThan5
      expr: ping_request_count > 5
      for: 10s
@@ -171,6 +179,13 @@ scrape_configs:
 # AlertMaanager
 
 - Link: https://prometheus.io/docs/alerting/latest/alertmanager/
+
+  # alertmanager.yml
+
+````
+
+  ````
+  
 
 # Webhook
 - Link https://webhook.site/#!/49627f3d-1930-47af-8c80-2a63f9378bcd/1140d711-fad3-4189-8e9e-f1a6b706d7a3/1
