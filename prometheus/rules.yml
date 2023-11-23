@@ -4,3 +4,35 @@ groups:
    - alert: CountGreaterThan5
      expr: ping_request_count > 5
      for: 10s
+
+   #Disk
+   - alert: LowDiskSpace
+     expr: node_filesystem_free{fstype="ext4"} < 1e9
+     for: 5m
+     labels:
+        severity: critical
+     annotations:
+       summary: Low disk space on host {{ $labels.instance}}
+       description: The free disk space on host {{
+          $labels.instance }} has dropped below 1G
+
+   #Http erro 500
+   - alert: HighRequestErrorRate
+     expr: (sum(rate(http_requests_total{status="500"}[5s])) /sum(rate(http_requests_total[5s]))) > 0.05
+     for: 5s
+     labels:
+        severity: critical
+     annotations:
+        summary: High request error rate
+        description: The error rate for HTTP requests has exceeded
+          5% for 5 seconds.
+
+  ### Trafic Network
+   - alert: HighNetworkTraffic
+     expr: node_network_receive_bytes > 100e6
+     for: 5s
+     labels:
+        severity: warning
+     annotations:
+        summary: High network traffic on host {{ $labels.instance }}
+        description: The inbound network traffic on host {{$labels.instance }} has exceeded 100 MB/s for 5 seconds
