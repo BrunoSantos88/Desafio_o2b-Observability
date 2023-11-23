@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+
   prometheus:
     image: prom/prometheus
     ports:
@@ -11,6 +12,12 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     network_mode: "host"
+
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - 9100:9100
+    network_mode: "host"
  
   alertmanager:
     image: prom/alertmanager
@@ -19,6 +26,18 @@ services:
      - '9093:9093'
     volumes:
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    network_mode: "host"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+    - 8080:8080
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
     network_mode: "host"
 
   grafana:

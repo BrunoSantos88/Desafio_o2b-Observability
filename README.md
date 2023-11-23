@@ -3,20 +3,71 @@ Prometheus é um kit de ferramentas de alerta e monitoramento de sistemas de có
 
 # Clona repository
 
-- Acessar pasta Desafio_o2b
-- docker-compose up -d
+``` Acessar pasta Desafio_o2b
+git clone https://github.com/BrunoSantos88/Desafio_o2b-Observability.git
+cd Desafio_o2b-Observability
+``` 
 
 # Install
+``` Dependencias caso seja feito local
+ pip install Flask prometheus_client
+```
+# Execute 
+````
+python aplication/app.py
+````
+docker.compose.yml
+``` yml
+version: '3'
 
-- pip install Flask prometheus_client
+services:
 
-# Excutar
--  python python-app/app.py
-  
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules.yml:/etc/prometheus/rules.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    network_mode: "host"
+ 
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alertmanager
+    ports:
+     - '9093:9093'
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    network_mode: "host"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+    - 8080:8080
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    network_mode: "host"
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    network_mode: "host"
+
+volumes:
+  grafana-data:
+
+````
 # killerKoda
 - Linux (baseado no Ubuntu)
 - Docker
-- Golang
 - Prometheus
 - Grafana
 - Alertmanager
@@ -30,34 +81,88 @@ Prometheus é um kit de ferramentas de alerta e monitoramento de sistemas de có
 - Alert Manager
 - Link: https://samber.github.io/awesome-prometheus-alerts/rules.html#docker-containers
 
-# Node_exported install
-- curl -LO https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
-- tar -xvf node_exporter-0.18.1.linux-amd64.tar.gz
-- mv node_exporter-0.18.1.linux-amd64/node_exporter /usr/local/bin/
-- useradd -rs /bin/false node_exporter
-- nano /etc/systemd/system/node_exporter.service
-
-[Unit]
-Description=Node Exporter
-After=network.target
-
-</p>
-[Service] </p>
-User=node_exporter  </p>
-Group=node_exporter </p>
-Type=simple </p>
-ExecStart=/usr/local/bin/node_exporter </p>
-
-[Install] </p>
-WantedBy=multi-user.target </p>
-</p>
-
-- systemctl daemon-reload
-- systemctl start node_exporter
-- systemctl enable node_exporter
-- acessar http://<server-IP>:9100/metrics
 # Promethues 
 - Link https://prometheus.io/docs/introduction/overview/
 
+# prometheus.yml
+  ```
+global:
+  scrape_interval: 5s
+  evaluation_interval: 10s
+
+  
+rule_files:
+  - rules.yml
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+       - localhost:9093
+       
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['localhost:9100']
+  - job_name: python_server
+    scrape_interval: 5s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["localhost:3001"]
+  - job_name: cadvisor
+    scrape_interval: 5s
+    static_configs:
+    - targets: ["localhost:8080"]
+  - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9100']
+
+```
+
+# Rules
+- Link https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+
+  # rules.yml
+````
+  groups:
+ - name: Count greater than 5
+   rules:global:
+  resolve_timeout: 5m
+route:
+  receiver: webhook_receiver
+receivers:
+    - name: webhook_receiver
+      webhook_configs:
+        - url: 'https://webhook.site/49627f3d-1930-47af-8c80-2a63f9378bcd'
+          send_resolved: false
+   - alert: CountGreaterThan5
+     expr: ping_request_count > 5
+     for: 10s
+  ````
+
+# AlertMaanager
+
+- Link: https://prometheus.io/docs/alerting/latest/alertmanager/
+
+  # alertmanager.yml
+
+````
+global:
+  resolve_timeout: 5m
+route:
+  receiver: webhook_receiver
+receivers:
+    - name: webhook_receiver
+      webhook_configs:
+        - url: 'https://webhook.site/49627f3d-1930-47af-8c80-2a63f9378bcd'
+          send_resolved: false
+  ````
+  
+
 # Webhook
 - Link https://webhook.site/#!/49627f3d-1930-47af-8c80-2a63f9378bcd/1140d711-fad3-4189-8e9e-f1a6b706d7a3/1
+
+# install node_exported
+Link: https://developer.couchbase.com/tutorial-node-exporter-setup
