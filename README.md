@@ -4,13 +4,19 @@ Prometheus é um kit de ferramentas de alerta e monitoramento de sistemas de có
 # Clona repository
 
 ``` Acessar pasta Desafio_o2b
-docker-compose up -d
+git clone https://github.com/BrunoSantos88/Desafio_o2b-Observability.git
+cd Desafio_o2b-Observability
 ``` 
 
 # Install
 ``` Dependencias
  pip install Flask prometheus_client
-``` 
+```
+# Docker-compse 
+```yml
+
+````
+
 ``` Excutar
   python python-app/app.py
 ```   
