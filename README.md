@@ -12,7 +12,8 @@ cd Desafio_o2b-Observability
 ``` Dependencias
  pip install Flask prometheus_client
 ```
-````yml
+docker.compose.yml
+``` yml
 version: '3'
 
 services:
@@ -46,7 +47,7 @@ services:
 volumes:
   grafana-data:
 ````
-
+# Executar
 ``` Excutar
   python python-app/app.py
 ```   
