@@ -18,17 +18,6 @@ version: '3'
 
 services:
 
-  aplication:
-    build:
-      context: .
-      dockerfile: dockerfile
-    ports:
-      - 3001:3001
-    environment:
-      - PYTHONUNBUFFERED=1
-    depends_on:
-      - prometheus
-
   prometheus:
     image: prom/prometheus
     ports:
@@ -38,12 +27,6 @@ services:
       - ./prometheus/rules.yml:/etc/prometheus/rules.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-    network_mode: "host"
-
-  node-exporter:
-    image: prom/node-exporter
-    ports:
-      - 9100:9100
     network_mode: "host"
  
   alertmanager:
@@ -176,3 +159,6 @@ receivers:
 
 # Webhook
 - Link https://webhook.site/#!/49627f3d-1930-47af-8c80-2a63f9378bcd/1140d711-fad3-4189-8e9e-f1a6b706d7a3/1
+
+# install node_exported
+Link: https://developer.couchbase.com/tutorial-node-exporter-setup
