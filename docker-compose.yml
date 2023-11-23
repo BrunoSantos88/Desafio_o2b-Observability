@@ -41,14 +41,13 @@ services:
     network_mode: "host"
 
   grafana:
-    image: grafana/grafana:latest
-    volumes:
-      - ./grafana/data:/var/lib/grafana
-      - ./grafana/config:/etc/grafana
+    image: grafana/grafana:7.5.7
     ports:
-      - "3000:3000"
-    depends_on:
-      - prometheus
+      - 3000:3000
+    restart: unless-stopped
+    volumes:
+      - ./promethues/prometheus_ds.yml:/etc/grafana/provisioning/datasources
+      - grafana-data:/var/lib/grafana
     network_mode: "host"
 
 volumes:
