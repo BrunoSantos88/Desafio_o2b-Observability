@@ -183,7 +183,15 @@ receivers:
   # alertmanager.yml
 
 ````
-
+global:
+  resolve_timeout: 5m
+route:
+  receiver: webhook_receiver
+receivers:
+    - name: webhook_receiver
+      webhook_configs:
+        - url: 'https://webhook.site/49627f3d-1930-47af-8c80-2a63f9378bcd'
+          send_resolved: false
   ````
   
 
