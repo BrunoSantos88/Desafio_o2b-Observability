@@ -49,7 +49,7 @@ volumes:
 ````
 # Executar
 ``` Excutar
-  python python-app/app.py
+  python aplication/app.py
 ```   
 # killerKoda
 - Linux (baseado no Ubuntu)
