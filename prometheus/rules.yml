@@ -8,7 +8,7 @@ groups:
    #Disk
    - alert: LowDiskSpace
      expr: node_filesystem_free{fstype="ext4"} < 1e9
-     for: 5m
+     for: 5s
      labels:
         severity: critical
      annotations:
