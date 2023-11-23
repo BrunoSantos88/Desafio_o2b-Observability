@@ -159,7 +159,7 @@ scrape_configs:
 - Link https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
 
   # rules.yml
-  ````
+````
   groups:
  - name: Count greater than 5
    rules:
