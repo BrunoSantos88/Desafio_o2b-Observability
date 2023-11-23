@@ -17,6 +17,18 @@ docker.compose.yml
 version: '3'
 
 services:
+
+  aplication:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - 3001:3001
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - prometheus
+
   prometheus:
     image: prom/prometheus
     ports:
@@ -26,6 +38,12 @@ services:
       - ./prometheus/rules.yml:/etc/prometheus/rules.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+    network_mode: "host"
+
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - 9100:9100
     network_mode: "host"
  
   alertmanager:
@@ -37,6 +55,18 @@ services:
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
     network_mode: "host"
 
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+    - 8080:8080
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    network_mode: "host"
+
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -46,15 +76,11 @@ services:
 
 volumes:
   grafana-data:
+
 ````
-# Executar
-``` Excutar
-  python aplication/app.py
-```   
 # killerKoda
 - Linux (baseado no Ubuntu)
 - Docker
-- Golang
 - Prometheus
 - Grafana
 - Alertmanager
@@ -67,60 +93,6 @@ volumes:
 
 - Alert Manager
 - Link: https://samber.github.io/awesome-prometheus-alerts/rules.html#docker-containers
-
-# Node_exported install
-
-``` install node_exporter
-
-wget \
-  https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
-
-# Create User
-sudo groupadd -f node_exporter
-sudo useradd -g node_exporter --no-create-home --shell /bin/false node_exporter
-sudo mkdir /etc/node_exporter
-sudo chown node_exporter:node_exporter /etc/node_exporter
-
-#Pacote
-tar -xvf node_exporter-1.0.1.linux-amd64.tar.gz
-mv node_exporter-1.0.1.linux-amd64 node_exporter-files
-
-# Install
-sudo cp node_exporter-files/node_exporter /usr/bin/
-sudo chown node_exporter:node_exporter /usr/bin/node_exporter
-
-nano /etc/systemd/system/node_exporter.service
-
-[Unit]
-Description=Node Exporter
-Documentation=https://prometheus.io/docs/guides/node-exporter/
-Wants=network-online.target
-After=network-online.target
-
-[Service]
-User=node_exporter
-Group=node_exporter
-Type=simple
-Restart=on-failure
-ExecStart=/usr/bin/node_exporter \
-  --web.listen-address=:9100
-
-[Install]
-WantedBy=multi-user.target
-
-#Execute
-sudo chmod 664 /usr/lib/systemd/system/node_exporter.service
-
-# Recarregar e Start
-sudo systemctl daemon-reload
-sudo systemctl start node_exporter
-
-# Status e Enable
-sudo systemctl status node_exporter
-sudo systemctl enable node_exporter.service
-
-http://<node_exporter-ip>:9100/metrics
-``` 
 
 # Promethues 
 - Link https://prometheus.io/docs/introduction/overview/
@@ -152,6 +124,13 @@ scrape_configs:
     metrics_path: /metrics
     static_configs:
       - targets: ["localhost:3001"]
+  - job_name: cadvisor
+    scrape_interval: 5s
+    static_configs:
+    - targets: ["localhost:8080"]
+  - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9100']
 
 ```
 
