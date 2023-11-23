@@ -125,6 +125,36 @@ http://<node_exporter-ip>:9100/metrics
 # Promethues 
 - Link https://prometheus.io/docs/introduction/overview/
 
+# prometheus.yml
+  ```
+global:
+  scrape_interval: 5s
+  evaluation_interval: 10s
+
+  
+rule_files:
+  - rules.yml
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+       - localhost:9093
+       
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['localhost:9100']
+  - job_name: python_server
+    scrape_interval: 5s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["localhost:3001"]
+
+```
+
 # Rules
 - Link https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
 
