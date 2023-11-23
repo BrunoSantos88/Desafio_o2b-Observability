@@ -12,6 +12,10 @@ cd Desafio_o2b-Observability
 ``` Dependencias caso seja feito local
  pip install Flask prometheus_client
 ```
+# Execute 
+````
+python aplication/app.py
+````
 docker.compose.yml
 ``` yml
 version: '3'
