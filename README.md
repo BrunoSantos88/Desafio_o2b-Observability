@@ -158,6 +158,11 @@ scrape_configs:
 # Rules
 - Link https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
 
+  # rules.yml
+  ```
+
+  ```
+
 # AlertMaanager
 
 - Link: https://prometheus.io/docs/alerting/latest/alertmanager/
