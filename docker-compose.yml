@@ -2,6 +2,17 @@ version: '3'
 
 services:
 
+  aplication:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - 3001:3001
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - prometheus
+
   prometheus:
     image: prom/prometheus
     ports:
