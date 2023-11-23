@@ -91,5 +91,20 @@ def metrics():
 def metrics_text():
     return MetricsHandler(REGISTRY).do_GET(request)
 
+REQUEST_COUNT = Counter(
+    'app_request_count',
+    'Application Request Count',
+    ['method', 'endpoint', 'http_status']
+)
+REQUEST_LATENCY = Histogram(
+    'app_request_latency_seconds',
+    'Application Request Latency',
+    ['method', 'endpoint']
+)
+@app.route('/')
+def hello():
+    start_time = time.time()
+    REQUEST_COUNT.labels('GET', '/', 200).inc()
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3001)

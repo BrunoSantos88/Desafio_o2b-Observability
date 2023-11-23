@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+
   prometheus:
     image: prom/prometheus
     ports:
@@ -10,6 +11,12 @@ services:
       - ./prometheus/rules.yml:/etc/prometheus/rules.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+    network_mode: "host"
+
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - 9100:9100
     network_mode: "host"
  
   alertmanager:
