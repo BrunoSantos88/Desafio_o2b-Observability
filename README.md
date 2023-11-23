@@ -12,9 +12,39 @@ cd Desafio_o2b-Observability
 ``` Dependencias
  pip install Flask prometheus_client
 ```
-# Docker-compse 
-```yml
+````yml
+version: '3'
 
+services:
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules.yml:/etc/prometheus/rules.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    network_mode: "host"
+ 
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alertmanager
+    ports:
+     - '9093:9093'
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    network_mode: "host"
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    network_mode: "host"
+
+volumes:
+  grafana-data:
 ````
 
 ``` Excutar
