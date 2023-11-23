@@ -5,5 +5,5 @@ route:
 receivers:
     - name: webhook_receiver
       webhook_configs:
-        - url: 'https://hooks.slack.com/services/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'
+        - url: 'https://hooks.slack.com/services/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'
           send_resolved: false

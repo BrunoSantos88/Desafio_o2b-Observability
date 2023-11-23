@@ -6,10 +6,10 @@ groups:
      for: 5s
      
 # ALERT UP TIME
- - name: AllInstances
+ - name: app
    rules:
    - alert: InstanceDown
-     expr: up == 0
+     expr: up{instance="localhost:3001", job="app"} == 0
      for: 5s
      annotations:
        title: 'Instance {{ $labels.instance }} down'
