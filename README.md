@@ -159,9 +159,14 @@ scrape_configs:
 - Link https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
 
   # rules.yml
-  ```
-
-  ```
+  ````
+  groups:
+ - name: Count greater than 5
+   rules:
+   - alert: CountGreaterThan5
+     expr: ping_request_count > 5
+     for: 10s
+  ````
 
 # AlertMaanager
 
