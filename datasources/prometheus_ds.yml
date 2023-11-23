@@ -1,5 +1,5 @@
 datasources:
-- name: nodeexported
+- name: node_exported
   access: proxy
   type: prometheus
   url: http://localhost:9090
