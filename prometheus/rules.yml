@@ -10,7 +10,7 @@ groups:
  - name: Aplication
    rules:
    - alert: InstanceDown
-     expr: up{instance="localhost:3001", job="app"}
+     expr: up{instance="localhost:3001", job="app"} == 0
      for: 5s
      annotations:
        title: 'Instance {{ $labels.instance }} down'
