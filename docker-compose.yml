@@ -30,6 +30,12 @@ services:
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
     network_mode: "host"
 
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - 9100:9100
+    network_mode: "host"
+
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
