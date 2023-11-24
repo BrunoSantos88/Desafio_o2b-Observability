@@ -184,8 +184,4 @@ Link: https://grafana.com/grafana/dashboards/
 ````
 sudo apt-get install stress-ng -y
 stress-ng --cpu 4 --io 2 --vm 1 --vm-bytes 256M --timeout 60s
-
-stress-ng --cpu 8 --cpu-ops 800000
-
-stress-ng --cpu 4 --io 2 --timeout 60s --metrics
 ````
