@@ -10,7 +10,7 @@ groups:
  - name: Aplication
    rules:
    - alert: InstanceDown
-     expr: up{instance="localhost:3001", job="app"} == 0
+     expr: up{instance="localhost:3001", job="pythom_server"} == 0
      for: 5s
      annotations:
        title: 'Instance {{ $labels.instance }} down'
@@ -34,7 +34,7 @@ groups:
  - name: NetworkDown
    rules:
    - alert: NetworkDownAlert
-     expr: node_network_up{device="enp1s0", instance="localhost:9100", job="node-exporter"} == 0
+     expr: node_network_up{device="enp1s0", instance="localhost:9200", job="node-exporter"} == 0
      for: 5s
      labels:
        severity: critical
