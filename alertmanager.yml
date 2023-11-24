@@ -1,12 +1,7 @@
-route:
-    receiver: 'slack'
- 
 receivers:
-    - name: 'slack'
-      slack_configs:
-          - send_resolved: true
-            channel: '#monitoring-instances'
-            api_url: 'https://hooks.slack.com/services/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'
+  - name: 'team-alerts'
+    webhook_configs:
+      - url: 'https://v3hfv.webhook.office.com/webhookb2/29b2ce8b-22c6-4912-bdf6-f00e1e2ddcd4@0979c9b7-da7e-4f8c-ab71-b586d387caf9/IncomingWebhook/4229927945ff45b3b61460751a157a64/ac05b4bd-f600-4ce8-bebc-4ef113bb5606'
 
 
             
