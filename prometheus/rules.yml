@@ -22,8 +22,7 @@ groups:
  - name: Uso de disk % maximo
    rules:
    - alert: LowInodesAlert
-     expr: node_filesystem_files_free{device="/dev/vda1"} < 1000
-     for: 5s
+     expr: node_filesystem_files_free{device="/dev/vda1", fstype="ext4", instance="localhost:9200", job="node-exporter", mountpoint="/"} < 10000
      labels:
        severity: warning
      annotations:
