@@ -158,15 +158,19 @@ receivers:
   # alertmanager.yml
 
 ````
-global:
-  resolve_timeout: 5m
 route:
-  receiver: webhook_receiver
+  group_by: ['alertname', 'job']
+
+  group_wait: 5s
+  group_interval: 5s
+  repeat_interval: 5s
+
+  receiver: discord
+
 receivers:
-    - name: webhook_receiver
-      webhook_configs:
-        - url: 'https://webhook.site/49627f3d-1930-47af-8c80-2a63f9378bcd'
-          send_resolved: false
+- name: discord
+  discord_configs:
+  - webhook_url: "https://discord.com/api/webhooks/#############################"
   ````
   
 
