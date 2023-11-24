@@ -1,18 +1,7 @@
 global:
-  resolve_timeout: 5m
+  resolve_timeout: 5s
 receivers:
 - name: prometheus-msteams
   webhook_configs:
   - url: "hhttps://v3hfv.webhook.office.com/webhookb2/29b2ce8b-22c6-4912-bdf6-f00e1e2ddcd4@0979c9b7-da7e-4f8c-ab71-b586d387caf9/IncomingWebhook/f4383da051264bf3952ac228839c7447/ac05b4bd-f600-4ce8-bebc-4ef113bb5606"
     send_resolved: true
-route:
-  group_by:
-  - job
-  group_interval: 5s
-  group_wait: 5s
-  receiver: prometheus-msteams
-  repeat_interval: 5s
-  routes:
-  - match:
-      alertname: Watchdog
-    receiver: prometheus-msteams
