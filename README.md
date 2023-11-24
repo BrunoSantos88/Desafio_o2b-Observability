@@ -136,19 +136,58 @@ scrape_configs:
   # rules.yml
 ````
   groups:
+  #Request contagem acesso
  - name: Count greater than 5
-   rules:global:
-  resolve_timeout: 5m
-route:
-  receiver: webhook_receiver
-receivers:
-    - name: webhook_receiver
-      webhook_configs:
-        - url: 'https://webhook.site/49627f3d-1930-47af-8c80-2a63f9378bcd'
-          send_resolved: false
+   rules:
    - alert: CountGreaterThan5
      expr: ping_request_count > 5
-     for: 10s
+     for: 5s
+     
+# ALERT UP TIME
+ - name: Aplication
+   rules:
+   - alert: InstanceDown
+     expr: up{instance="localhost:3001", job="pythom_server"} == 0
+     for: 5s
+     annotations:
+       title: 'Instance {{ $labels.instance }} down'
+       description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute.'
+     labels:
+       severity: 'critical'
+ 
+  # Atingir espaço abaixo de 1GB
+ - name: Uso de disk % maximo
+   rules:
+   - alert: LowInodesAlert
+     expr: node_filesystem_avail_bytes{mountpoint="/", instance="localhost:9200", job="node-exporter"} / node_filesystem_size_bytes{mountpoint="/", instance="localhost:9200", job="node-exporter"} * 100 < 10
+     labels:
+       severity: warning
+     annotations:
+      summary: "Low Inodes"
+      description: "The number of free inodes on /dev/vda1 is below 1000."
+
+  # Link de Dados
+ - name: NetworkDown
+   rules:
+   - alert: NetworkDownAlert
+     expr: node_network_up{device="enp1s0", instance="localhost:9200", job="node-exporter"}
+     for: 5s
+     labels:
+       severity: critical
+     annotations:
+      summary: "Network Interface Down"
+      description: "The network interface 'enp1s0' is down."
+
+ - name: Memory Usage
+   rules:
+   - alert: MemoryUsageAlert
+     expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes
+     for: 5s
+     labels:
+       severity: critical
+     annotations:
+      summary: "High Memory Usage"
+      description: "Memory usage is above 90%."
   ````
 
 # AlertMaanager
@@ -158,15 +197,19 @@ receivers:
   # alertmanager.yml
 
 ````
-global:
-  resolve_timeout: 5m
 route:
-  receiver: webhook_receiver
+  group_by: ['alertname', 'job']
+
+  group_wait: 5s
+  group_interval: 5s
+  repeat_interval: 5s
+
+  receiver: discord
+
 receivers:
-    - name: webhook_receiver
-      webhook_configs:
-        - url: 'https://webhook.site/49627f3d-1930-47af-8c80-2a63f9378bcd'
-          send_resolved: false
+- name: discord
+  discord_configs:
+  - webhook_url: "https://discord.com/api/webhooks/#############################"
   ````
   
 
@@ -184,8 +227,10 @@ Link: https://grafana.com/grafana/dashboards/
 ````
 sudo apt-get install stress-ng -y
 stress-ng --cpu 4 --io 2 --vm 1 --vm-bytes 256M --timeout 60s
-
-stress-ng --cpu 8 --cpu-ops 800000
-
-stress-ng --cpu 4 --io 2 --timeout 60s --metrics
 ````
+# Grafana DashBord
+
+<img src="https://private-user-images.githubusercontent.com/91704169/285541482-360bb4dc-9dd7-49d3-a4f7-a22a266dc733.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MDA4NjAxNzIsIm5iZiI6MTcwMDg1OTg3MiwicGF0aCI6Ii85MTcwNDE2OS8yODU1NDE0ODItMzYwYmI0ZGMtOWRkNy00OWQzLWE0ZjctYTIyYTI2NmRjNzMzLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFJV05KWUFYNENTVkVINTNBJTJGMjAyMzExMjQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjMxMTI0VDIxMDQzMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWMzY2U2Mzk2ZmI5NTFkZjE2MDI0MjY5MzU2MTc3NTgxZTYwZWU1ZWExMjZiMTUxNGQ0NWEzMDIyNTA0ODQ1NzImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.XXqBLE33SNm_XSI7nmLjkcMRlZusIWQIiQqcPbwwwKo" min-width="300px" max-width="900px" width="900px" align="center" alt="Computador illustration">
+
+ # DISCORD ALERT
+<img src="https://private-user-images.githubusercontent.com/91704169/285544410-b2b6f5af-bdcc-4ce3-88c2-9eb2a69ab124.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MDA4NjA1NTAsIm5iZiI6MTcwMDg2MDI1MCwicGF0aCI6Ii85MTcwNDE2OS8yODU1NDQ0MTAtYjJiNmY1YWYtYmRjYy00Y2UzLTg4YzItOWViMmE2OWFiMTI0LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFJV05KWUFYNENTVkVINTNBJTJGMjAyMzExMjQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjMxMTI0VDIxMTA1MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTI4ZmViN2YyMTg0ZjY1N2YzZmIxZTJjZmNlYjcxMzJjNzRjZDljOTlhOGM0OWM0MGRmZTYxNzdjYjk3ZTlkMmUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.WEQptAefwxiAj_y86QnJzdde_H72_l8UpJGnYsgqa1Y" min-width="300px" max-width="900px" width="900px" align="rigth" alt="Computador illustration">
