@@ -1,9 +1,10 @@
 global:
-  resolve_timeout: 5s
+resolve_timeout: 5s
+slack_api_url: 'https://hooks.slack.com/services/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'
 route:
-  receiver: webhook_receiver
+receiver: 'slack-notifications'
 receivers:
-    - name: webhook_receiver
-      webhook_configs:
-        - url: "https://v3hfv.webhook.office.com/webhookb2/29b2ce8b-22c6-4912-bdf6-f00e1e2ddcd4@0979c9b7-da7e-4f8c-ab71-b586d387caf9/IncomingWebhook/f4383da051264bf3952ac228839c7447/ac05b4bd-f600-4ce8-bebc-4ef113bb5606"
-          send_resolved: false
+- name: 'slack-notifications'
+slack_configs:
+- channel: '#monitoring-instances'
+send_resolved: true
