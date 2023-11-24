@@ -10,7 +10,7 @@ groups:
  - name: Aplication
    rules:
    - alert: InstanceDown
-     expr: up{instance="localhost:3001", job="app"} == 0
+     expr: up{instance="localhost:3001", job="app"}
      for: 5s
      annotations:
        title: 'Instance {{ $labels.instance }} down'
@@ -22,7 +22,7 @@ groups:
  - name: DISK USAGE
    rules:
    - alert: LowFileNodes
-     expr: node_filesystem_files_free{device="/dev/vda1", fstype="ext4", instance="localhost:9100", job="node-exporter", mountpoint="/"} < 1000000
+     expr: node_filesystem_files_free{device="/dev/vda1", fstype="ext4", instance="localhost:9100", job="node-exporter", mountpoint="/"}
      for: 5s
      labels:
        severity: warning
@@ -34,7 +34,7 @@ groups:
  - name: Network Porta Link de Dados
    rules:
    - alert: NetworkInterfaceDown
-     expr: node_network_up{device="enp1s0", instance="localhost:9100", job="node-exporter"} == 0
+     expr: node_network_up{device="enp1s0", instance="localhost:9100", job="node-exporter"}
      for: 5s
      labels:
        severity: critical
@@ -45,7 +45,7 @@ groups:
  - name: Memory Usage
    rules:
    - alert: LowAvailableMemory
-     expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
+     expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes
      for: 5s
      labels:
        severity: warning
