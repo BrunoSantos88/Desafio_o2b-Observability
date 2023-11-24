@@ -22,7 +22,7 @@ groups:
  - name: Uso de disk % maximo
    rules:
    - alert: LowInodesAlert
-     expr: node_filesystem_files_free{device="/dev/vda1", fstype="ext4", instance="localhost:9200", job="node-exporter", mountpoint="/"} < 10000
+     expr: node_filesystem_files_free{device="/dev/vda1", fstype="ext4", instance="localhost:9200", job="node-exporter", mountpoint="/"}
      labels:
        severity: warning
      annotations:
@@ -33,7 +33,7 @@ groups:
  - name: NetworkDown
    rules:
    - alert: NetworkDownAlert
-     expr: node_network_up{device="enp1s0", instance="localhost:9200", job="node-exporter"} == 0
+     expr: node_network_up{device="enp1s0", instance="localhost:9200", job="node-exporter"}
      for: 5s
      labels:
        severity: critical
@@ -44,7 +44,7 @@ groups:
  - name: Memory Usage
    rules:
    - alert: MemoryUsageAlert
-     expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 > 90
+     expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes
      for: 5s
      labels:
        severity: critical
