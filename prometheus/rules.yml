@@ -19,36 +19,36 @@ groups:
        severity: 'critical'
  
   # Atingir espaço abaixo de 1GB
- - name: DISK USAGE
+ - name: Uso de disk % maximo
    rules:
-   - alert: LowFileNodes
-     expr: node_filesystem_files_free{device="/dev/vda1", fstype="ext4", instance="localhost:9100", job="node-exporter", mountpoint="/"}
+   - alert: LowInodesAlert
+     expr: node_filesystem_files_free{device="/dev/vda1"} < 1000
      for: 5s
      labels:
        severity: warning
      annotations:
-      summary: "Low file nodes on filesystem"
-      description: "The number of free file nodes is below the threshold. Investigate and take action."
+      summary: "Low Inodes"
+      description: "The number of free inodes on /dev/vda1 is below 1000."
 
   # Link de Dados
- - name: Network Porta Link de Dados
+ - name: NetworkDown
    rules:
-   - alert: NetworkInterfaceDown
-     expr: node_network_up{device="enp1s0", instance="localhost:9100", job="node-exporter"}
+   - alert: NetworkDownAlert
+     expr: node_network_up{device="enp1s0", instance="localhost:9100", job="node-exporter"} == 0
      for: 5s
      labels:
        severity: critical
      annotations:
-      summary: "Network interface is down"
-      description: "The network interface enp1s0 is down. Investigate and take action."
+      summary: "Network Interface Down"
+      description: "The network interface 'enp1s0' is down."
 
  - name: Memory Usage
    rules:
-   - alert: LowAvailableMemory
-     expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes
+   - alert: MemoryUsageAlert
+     expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 > 90
      for: 5s
      labels:
-       severity: warning
+       severity: critical
      annotations:
-       summary: "Low available memory" 
-       description: "The available memory is below the threshold. Investigate and take action."
+      summary: "High Memory Usage"
+      description: "Memory usage is above 90%."
