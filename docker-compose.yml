@@ -49,7 +49,7 @@ services:
     network_mode: "host"
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana-enterprise
     ports:
       - 3000:3000
     restart: unless-stopped
