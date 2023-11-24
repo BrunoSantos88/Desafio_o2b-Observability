@@ -1,6 +1,14 @@
 version: '3'
-
+  
 services:
+  
+  aplication:
+    build: aplication/.
+    ports:
+      - "3001:3001"
+    environment:
+      - NAME=World
+    command: ["python", "app.py"]
 
   prometheus:
     image: prom/prometheus
