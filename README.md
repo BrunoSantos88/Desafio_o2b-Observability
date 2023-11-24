@@ -136,19 +136,58 @@ scrape_configs:
   # rules.yml
 ````
   groups:
+  #Request contagem acesso
  - name: Count greater than 5
-   rules:global:
-  resolve_timeout: 5m
-route:
-  receiver: webhook_receiver
-receivers:
-    - name: webhook_receiver
-      webhook_configs:
-        - url: 'https://webhook.site/49627f3d-1930-47af-8c80-2a63f9378bcd'
-          send_resolved: false
+   rules:
    - alert: CountGreaterThan5
      expr: ping_request_count > 5
-     for: 10s
+     for: 5s
+     
+# ALERT UP TIME
+ - name: Aplication
+   rules:
+   - alert: InstanceDown
+     expr: up{instance="localhost:3001", job="pythom_server"} == 0
+     for: 5s
+     annotations:
+       title: 'Instance {{ $labels.instance }} down'
+       description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute.'
+     labels:
+       severity: 'critical'
+ 
+  # Atingir espaço abaixo de 1GB
+ - name: Uso de disk % maximo
+   rules:
+   - alert: LowInodesAlert
+     expr: node_filesystem_avail_bytes{mountpoint="/", instance="localhost:9200", job="node-exporter"} / node_filesystem_size_bytes{mountpoint="/", instance="localhost:9200", job="node-exporter"} * 100 < 10
+     labels:
+       severity: warning
+     annotations:
+      summary: "Low Inodes"
+      description: "The number of free inodes on /dev/vda1 is below 1000."
+
+  # Link de Dados
+ - name: NetworkDown
+   rules:
+   - alert: NetworkDownAlert
+     expr: node_network_up{device="enp1s0", instance="localhost:9200", job="node-exporter"}
+     for: 5s
+     labels:
+       severity: critical
+     annotations:
+      summary: "Network Interface Down"
+      description: "The network interface 'enp1s0' is down."
+
+ - name: Memory Usage
+   rules:
+   - alert: MemoryUsageAlert
+     expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes
+     for: 5s
+     labels:
+       severity: critical
+     annotations:
+      summary: "High Memory Usage"
+      description: "Memory usage is above 90%."
   ````
 
 # AlertMaanager
