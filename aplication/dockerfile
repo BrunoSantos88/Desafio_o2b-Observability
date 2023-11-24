@@ -1,0 +1,7 @@
+FROM python:3.8-slim
+WORKDIR /app
+COPY . app.py
+RUN pip install Flask prometheus_client
+EXPOSE 3001
+ENV NAME World
+CMD ["python", "app.py"]
