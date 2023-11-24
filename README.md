@@ -56,6 +56,15 @@ services:
 
   grafana:
     image: grafana/grafana
+    #image: grafana/grafana:8.4.11
+    #image: grafana/grafana:8.5.27
+    #image: grafana/grafana:9.0.9
+    #image: grafana/grafana:9.1.8
+    #image: grafana/grafana:9.2.20
+    #image: grafana/grafana:9.3.16
+    #image: grafana/grafana:9.4.13
+    #image: grafana/grafana:9.5.6
+   #image: grafana/grafana:10.0.3
     container_name: grafana
     ports:
       - 3000:3000
