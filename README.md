@@ -234,3 +234,5 @@ stress-ng --cpu 4 --io 2 --vm 1 --vm-bytes 256M --timeout 60s
 
  # DISCORD ALERT
 <img src="https://private-user-images.githubusercontent.com/91704169/285544410-b2b6f5af-bdcc-4ce3-88c2-9eb2a69ab124.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MDA4NjA1NTAsIm5iZiI6MTcwMDg2MDI1MCwicGF0aCI6Ii85MTcwNDE2OS8yODU1NDQ0MTAtYjJiNmY1YWYtYmRjYy00Y2UzLTg4YzItOWViMmE2OWFiMTI0LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFJV05KWUFYNENTVkVINTNBJTJGMjAyMzExMjQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjMxMTI0VDIxMTA1MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTI4ZmViN2YyMTg0ZjY1N2YzZmIxZTJjZmNlYjcxMzJjNzRjZDljOTlhOGM0OWM0MGRmZTYxNzdjYjk3ZTlkMmUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.WEQptAefwxiAj_y86QnJzdde_H72_l8UpJGnYsgqa1Y" min-width="300px" max-width="900px" width="900px" align="rigth" alt="Computador illustration">
+
+# Link video: https://www.youtube.com/watch?v=8s0hic3XusA
