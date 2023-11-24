@@ -5,6 +5,6 @@ receivers:
     - name: 'slack'
       slack_configs:
           - send_resolved: true
-            username: 'alertmanager'
+            username: 'BrunoSantos'
             channel: '#monitoring-instances'
             api_url: 'https://hooks.slack.com/services/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'
