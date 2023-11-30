@@ -1,20 +1,23 @@
-pipeline {
-    agent {
+agent {
         docker {
-            image 'docker:latest'
+            // Specify the Docker image to use
+            image 'your-docker-image:tag'
+            // Specify additional options if needed
+            args '-v /your/host/path:/container/path'
         }
     }
-}
+    
     stages {
-        stage('Hello') {
+        stage('Build') {
             steps {
-                echo 'Hello '
+                sh 'docker exec container_id your_build_command'
             }
         }
-
-         stage('word') {
+        
+        stage('Test') {
             steps {
-                echo 'World'
+                // Your test steps here
+                sh 'docker exec container_id your_test_command'
             }
         }
     }
