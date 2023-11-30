@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            // Specify the Docker image to use
+            image 'docker:latest'
+        }
+    }
     stages {
         stage('Hello') {
             steps {
@@ -13,4 +18,5 @@ pipeline {
             }
         }
     }
-}
+
+    }
